@@ -1,0 +1,49 @@
+---
+- hosts: work
+  become: yes
+  gather_facts: no
+
+  tasks:
+  - name: update
+    shell: apt update 
+
+  - name: install kvm and libvirt
+    apt:
+      name:
+        - qemu-kvm
+        - libvirt-clients
+        - libvirt-daemon-system
+        - bridge-utils
+        - libguestfs-tools
+        - genisoimage
+        - virtinst
+        - libosinfo-bin
+        - net-tools
+      state: latest
+  
+  
+  - name: create all vms
+    include_role:
+      name: create-vm
+    vars:
+      vm_name: "{{ item.name }}"
+      vm_ip: "{{ item.ip }}"
+    with_items: "{{ vm_to_create }}"
+
+  - name: wait for vms
+    wait_for:
+      host: "{{ item.ip }}"
+      port: 22
+    with_items: "{{ vm_to_create }}"
+
+- hosts: slave
+  gather_facts: no
+  become: yes
+
+  pre_tasks:
+ 
+  - name: install python
+    raw: apt update -y && apt install -y python-minimal
+
+  roles:
+    - wordpress_install

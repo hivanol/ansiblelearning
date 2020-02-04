@@ -1,0 +1,6 @@
+[work]
+debian ansible_host=34.90.84.27 
+
+[slave]
+vm1 ansible_host=34.90.84.27 ansible_port=2221
+vm2 ansible_host=34.90.84.27 ansible_port=2222

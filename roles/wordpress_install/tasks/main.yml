@@ -1,0 +1,47 @@
+---
+
+- name: install apache
+  apt:
+    name: apache2
+    state: latest
+
+- name: install postgresql
+  apt:
+    name: postgresql
+    state: latest
+
+- name: install php
+  apt:
+    name:
+      - php
+      - libapache2-mod-php
+      - php-mcrypt 
+    state: latest
+
+- name: php config
+  lineinfile:
+    path: /etc/apache2/mods-enabled/dir.conf
+    regexp: '^	DirectoryIndex index.html index.cgi index.pl index.php index.xhtml index.htm'
+    line: '	DirectoryIndex index.php index.html index.cgi index.pl index.xhtml index.htm'
+
+- name: restart apache
+  service:
+    name: apache2
+    state: restarted
+- name: test
+  copy:
+    src: info.php
+    dest: /var/www/html/info.php
+- name: create db
+  postgresql_db: 
+    name: "{{ db_name }}"
+
+- name: create db user
+  postgresql_db:
+    db: "{{ db_name }}"
+    name: "{{ db_user }}"
+    password: "{{ db_pass }}"
+    priv: "CONNECT/products:ALL"
+
+#- name: download wordpress
+#  shell: wge

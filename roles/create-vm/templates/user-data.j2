@@ -1,0 +1,27 @@
+#cloud-config
+hostname: {{ vm_name }}
+users:
+  - name: ivan
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    lock_passwd: false
+    ssh-authorized-keys:
+     - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCdUzS3kKNWD/9L+KCXc1SqZmVbThzw2wlktwJb+FuMwqJQJBHP0bqFa1AJXxhArooogXnRkAbKC57o2Addk6f5aMtAd0zZtgaTbAFvsbb8dru3FftX6PliYZr/gcMwdqZ297WCUwbOloG0+goLWV65FimdVG8E0HQazgbkcKDooEFrTCmeut9XvtHUhuf7zf6Ee+XH5Gxrj9f+fSb/6jV54f6cUHqCXW1Keu5V5k/qn8Njq3M0fJH9qzZ0b7vDghnYwR+quvx/uZnSmuqZfnj+HdQc6agXWv/PhdSyQSBrobCURfjcufXRYemTF8N4Ax2JvrvTmMKyl2fZ2VzmX/Ff ivan
+     - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDiBMNmxKgFcHy3fnfhRf8uvSzU2voFIAN3qiRM1rBQsTHM054ncwN2gbQjnQTO2vgH5TqXMXP2nAHPvfUwlLnJ1WkC7XAqJzOCi+283YBdtML1DzXfcikHuMXvXByTs7slApJH55XvXPrHoYla65tzYFo2anabz71yB+15kGTNztRYyVJHqSDhckWwUUeH0n9IBxSOlA27A+sm0FrQSBrajrw0kLKXwEMQRWMoKddziW3I7txpHNd9j0kcb4ev0hQO+FFDWYwusvH4ZPADBfUNn0IAYPL0zBTlATczyywEkVSXXH6LP6SM5OWwgSB9V7iBPHCGY5gf2h9bUvx5JwEh root@vm1
+chpasswd:
+  list: |
+    ivan:123456
+  expire: false
+
+write_files:
+  - path:/etc/resolvconf/resolv.conf.d/head
+    content:|
+      nameserver 8.8.4.4
+      nameserver 8.8.8.8
+
+runcmd:
+  - service resolvconf restart
+  - systemctl restart networking
+  - touch /etc/cloud/cloud-init.disabled
+

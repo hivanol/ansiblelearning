@@ -1,0 +1,5 @@
+---
+# vars file for config_WAP
+db_name: mydb
+db_user: ivan
+db_pass: 123456
