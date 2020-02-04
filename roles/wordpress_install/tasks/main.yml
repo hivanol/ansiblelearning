@@ -28,20 +28,68 @@
   service:
     name: apache2
     state: restarted
-- name: test
+- block:
+    - name: create db
+      postgresql_db: 
+        name: "{{ db_name }}"
+
+    - name: create db user
+      postgresql_user:
+        name: "{{ db_user }}"
+        password: "{{ db_pass }}"
+        expires: infinity
+
+    - name: grant access to db
+      postgresql_privs:
+        db: "{{ db_name }}"
+        role: "{{ db_user }}"
+        objs: ALL_IN_SCHEMA
+        privs: SELECT,INSERT,UPDATE,DELETE
+  become: yes
+  become_user: postgres
+
+- name: donwload wordpress
+  unarchive:
+    src: https://wordpress.org/latest.tar.gz
+    dest: /var/www/html/
+    remote_src: yes
+
+- name: download PG4WP
+  unarchive:
+    src: https://github.com/kevinoid/postgresql-for-wordpress/archive/wordpress4-compat.zip
+    dest: /var/www/html/
+    remote_src: yes
+
+- name: copy PG4WP
+  shell: mv /var/www/html/postgresql-for-wordpress-wordpress4-compat/pg4wp /var/www/html/wordpress/wp-content/
+
+- name: copy db.php
   copy:
-    src: info.php
-    dest: /var/www/html/info.php
-- name: create db
-  postgresql_db: 
-    name: "{{ db_name }}"
+    src: /var/www/html/wordpress/wp-content/pg4wp/db.php
+    dest: /var/www/html/wordpress/wp-content/db.php
+    remote_src: yes
 
-- name: create db user
-  postgresql_db:
-    db: "{{ db_name }}"
-    name: "{{ db_user }}"
-    password: "{{ db_pass }}"
-    priv: "CONNECT/products:ALL"
+- name: rename wp config
+  copy:
+    src: /var/www/html/wordpress/wp-config-sample.php
+    dest: /var/www/html/wordpress/wp-config.php
+    remote_src: yes
 
-#- name: download wordpress
-#  shell: wge
+- name: setting db name in WP
+  lineinfile:
+    path: /var/www/html/wordpress/wp-config.php
+    regexp: 'database_name_here'
+    line: "{{ db_name }}"
+
+- name: setting db user in WP
+  lineinfile:
+    path: /var/www/html/wordpress/wp-config.php
+    regexp: 'username_here'
+    line: "{{ db_user }}"
+
+- name: setting db pass in WP
+  lineinfile:
+    path: /var/www/html/wordpress/wp-config.php
+    regexp: 'password_here'
+    line: "{{ db_pass }}"
+
