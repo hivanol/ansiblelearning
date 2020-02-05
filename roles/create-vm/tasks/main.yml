@@ -17,6 +17,9 @@
       dest: /var/lib/libvirt/images/network-config
 
   - name: download {{ vm_name }} img
+#    get_url:
+#      url: http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
+#      dest: "/var/lib/libvirt/images/{{ vm_name }}.img"
     shell: wget -q http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img -O /var/lib/libvirt/images/{{ vm_name }}.img
 
   - name: creating {{ vm_name }} iso
