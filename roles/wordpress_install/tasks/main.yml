@@ -78,7 +78,7 @@
 - name: copy PG4WP
   shell: mv /var/www/html/postgresql-for-wordpress-wordpress4-compat/pg4wp /var/www/html/wp-content/ 
 
-- nmae: remove empty PG4WP directory
+- name: remove empty PG4WP directory
   file:
     path: /var/www/html/postgresql-for-wordpress-wordpress4-compat
     state: absent
