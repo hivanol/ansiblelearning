@@ -1,8 +1,8 @@
 <domain type='kvm' id='4'>
   <name>{{ vm_name }}</name>
-  <memory unit='KiB'>4194304</memory>
-  <currentMemory unit='KiB'>4194304</currentMemory>
-  <vcpu placement='static'>2</vcpu>
+  <memory unit='KiB'>{{ vm_ram }}</memory>
+  <currentMemory unit='KiB'>{{ vm_ram }}</currentMemory>
+  <vcpu placement='static'>{{ vm_cpu }}</vcpu>
   <resource>
     <partition>/machine</partition>
   </resource>
@@ -34,7 +34,7 @@
     <emulator>/usr/bin/kvm</emulator>
     <disk type='file' device='disk'>
       <driver name='qemu' type='qcow2'/>
-      <source file='/var/lib/libvirt/images/{{ vm_name }}.img'/>
+      <source file='{{ vm_files_path }}/{{ vm_name }}.img'/>
       <backingStore/>
       <target dev='vda' bus='virtio'/>
       <alias name='virtio-disk0'/>
@@ -42,7 +42,7 @@
     </disk>
     <disk type='file' device='cdrom'>
        <driver name='qemu' type='raw'/>
-       <source file='/var/lib/libvirt/images/{{ vm_name }}_bootstrap.iso'/>
+       <source file='{{ vm_files_path }}/{{ vm_name }}_bootstrap.iso'/>
        <target dev='hda' bus='ide'/>
        <readonly/>
        <address type='drive' controller='0' bus='0' target='0' unit='0'/>

@@ -14,14 +14,7 @@ chpasswd:
     ivan:123456
   expire: false
 
-write_files:
-  - path:/etc/resolvconf/resolv.conf.d/head
-    content:|
-      nameserver 8.8.4.4
-      nameserver 8.8.8.8
-
 runcmd:
-  - service resolvconf restart
   - systemctl restart networking
   - touch /etc/cloud/cloud-init.disabled
 

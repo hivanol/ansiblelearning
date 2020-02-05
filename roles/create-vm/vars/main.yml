@@ -1,3 +1,5 @@
 ---
 # vars file for create-vm1
-
+vm_files_path: /var/lib/libvirt/images
+vm_ram: 4194304
+vm_cpu: 2
