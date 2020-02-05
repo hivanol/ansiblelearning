@@ -1,0 +1,30 @@
+---
+# tasks file for nginx_loadbalancer
+- name: delete old nginx
+  apt:
+    name:
+      - nginx
+      - nginx-common
+      - nginx-full
+    state: absent
+    purge: yes
+
+- name: install nginx
+  apt:
+    name: nginx
+    state: latest
+
+- name: configure loadbalancer
+  template:
+    src: load-balancer.conf.j2
+    dest: /etc/nginx/conf.d/load-balancer.conf
+
+- name: delete default configuration
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: restart nginx
+  service:
+    name: nginx
+    state: restarted

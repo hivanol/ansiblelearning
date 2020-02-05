@@ -30,6 +30,13 @@
       vm_ip: "{{ item.ip }}"
     with_items: "{{ vm_to_create }}"
 
+  - name: create loadbalancer
+    include_role:
+      name: nginx_loadbalancer
+    vars:
+      vm1_ip: "{{ vm_to_create[0].ip }}"
+      vm2_ip: "{{ vm_to_create[1].ip }}"
+
   - name: wait for vms
     wait_for:
       host: "{{ item.ip }}"
