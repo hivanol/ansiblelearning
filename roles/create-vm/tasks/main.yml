@@ -17,7 +17,7 @@
       dest: "{{ vm_files_path }}/network-config"
 
   - name: download {{ vm_name }} img
-    shell: wget -q http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img -O {{ vm_files_path }}/{{ vm_name }}.img
+    shell: wget -q {{ vm_img_link }} -O {{ vm_files_path }}/{{ vm_name }}.img
 
   - name: creating {{ vm_name }} iso
     shell: >-

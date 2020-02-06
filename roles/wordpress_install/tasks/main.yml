@@ -57,7 +57,7 @@
 
 - name: donwload wordpress
   unarchive:
-    src: https://wordpress.org/latest.tar.gz
+    src: "{{ wp_link }}"
     dest: /var/www/html/
     remote_src: yes
 
@@ -71,7 +71,7 @@
 
 - name: download PG4WP
   unarchive:
-    src: https://github.com/kevinoid/postgresql-for-wordpress/archive/wordpress4-compat.zip
+    src: "{{ pg4wp_link }}"
     dest: /var/www/html/
     remote_src: yes
 

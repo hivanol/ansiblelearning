@@ -3,3 +3,5 @@
 db_name: mydb
 db_user: ivan
 db_pass: 123456
+wp_link: https://wordpress.org/latest.tar.gz
+pg4wp_link: https://github.com/kevinoid/postgresql-for-wordpress/archive/wordpress4-compat.zip

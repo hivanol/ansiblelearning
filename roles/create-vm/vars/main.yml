@@ -3,3 +3,4 @@
 vm_files_path: /var/lib/libvirt/images
 vm_ram: 4194304
 vm_cpu: 2
+vm_img_link: http://cloud-images.ubuntu.com/xenial/current/xenial-server-cloudimg-amd64-disk1.img
